@@ -98,6 +98,19 @@ namespace OverPreview
 
 		#endregion
 
+		private void CoolPrintPreviewDialog_Load(object sender, EventArgs e)
+		{
+			var printers = PrinterSettings.InstalledPrinters;
+			foreach (string item in printers)
+				cbPrinters.Items.Add(item);
+			PrinterSettings_Changed();
+
+			numCopies.ValueChanged += Props_Changed;
+			cbPrinters.SelectedIndexChanged += Props_Changed;
+			cbRange.SelectedIndexChanged += Props_Changed;
+			cbOrientation.SelectedIndexChanged += Props_Changed;
+		}
+
 		//--------------------------------------------------------------------
 		#region ** overloads
 
@@ -135,7 +148,6 @@ namespace OverPreview
 			ps.MinimumPage = ps.FromPage = 1;
 			ps.MaximumPage = ps.ToPage = _preview.PageCount;
 
-			ps.PrinterName = cbPrinters.SelectedItem.ToString();
 			// print selected page range
 			_preview.Print();
 		}
@@ -171,30 +183,36 @@ namespace OverPreview
                 dlg.Document = Document;
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    // to show new page layout
-                    _preview.RefreshPreview();
-                }
-            }
-        }
-
-		private void linkPrinterProps_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			var ps = dlgPrinterSettings;
-			ps.PrinterName = cbPrinters.SelectedItem.ToString();
-			EditPrinterSettings(ps);
-		}
-
-		private void linkPageProps_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			using (var dlg = new PageSetupDialog())
-			{
-				dlg.Document = Document;
-				if (dlg.ShowDialog(this) == DialogResult.OK)
-				{
+					PrinterSettings_Changed();
 					// to show new page layout
 					_preview.RefreshPreview();
 				}
 			}
+        }
+
+		private void linkPrinterProps_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			dlgPrinterSettings.PrinterName = cbPrinters.SelectedItem.ToString();
+			EditPrinterSettings(dlgPrinterSettings);
+		}
+
+		private void Props_Changed(object sender, EventArgs e)
+		{
+			dlgPrinterSettings.Copies = (short)numCopies.Value;
+			dlgPrinterSettings.PrinterName = cbPrinters.SelectedItem.ToString();
+			dlgPrinterSettings.PrintRange = cbRange.SelectedIndex < 3 ? (PrintRange)cbRange.SelectedIndex : PrintRange.CurrentPage;
+			dlgPrinterSettings.DefaultPageSettings.Landscape = cbOrientation.SelectedIndex == 1;
+			Document.DefaultPageSettings.Landscape = cbOrientation.SelectedIndex == 1;
+			// to show new page layout
+			_preview.RefreshPreview();
+		}
+
+		private void PrinterSettings_Changed()
+		{
+			numCopies.Value = dlgPrinterSettings.Copies;
+			cbPrinters.SelectedIndex = cbPrinters.Items.IndexOf(dlgPrinterSettings.PrinterName);
+			cbRange.SelectedIndex = (int)dlgPrinterSettings.PrintRange;
+			cbOrientation.SelectedIndex = Document.DefaultPageSettings.Landscape ? 1 : 0;
 		}
 
 		#endregion
@@ -350,18 +368,6 @@ namespace OverPreview
 
 		#endregion
 
-		private void CoolPrintPreviewDialog_Load(object sender, EventArgs e)
-		{
-			var settings = new PrinterSettings();
-			var printers = PrinterSettings.InstalledPrinters;
-			//cbPrinters.Items.Add(settings.PrinterName);
-			foreach (string item in printers)
-				cbPrinters.Items.Add(item);
-			cbPrinters.SelectedIndex = cbPrinters.Items.IndexOf(settings.PrinterName);
-			cbRange.SelectedIndex = 0;
-			cbOrientation.SelectedIndex = 0;
-		}
-
 		#region Printer settings
 
 		[DllImport("kernel32.dll")]
@@ -399,6 +405,5 @@ namespace OverPreview
 		}
 
 		#endregion
-
 	}
 }

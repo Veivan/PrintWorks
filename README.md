@@ -1,1 +1,2 @@
 # PrintWorks
+Перенастройка диалога PrintPreview.

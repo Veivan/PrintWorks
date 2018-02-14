@@ -37,7 +37,7 @@
 			this.linkPrinterProps = new System.Windows.Forms.LinkLabel();
 			this.cbPrinters = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+			this.numCopies = new System.Windows.Forms.NumericUpDown();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.btPrint = new System.Windows.Forms.Button();
@@ -70,7 +70,7 @@
 			this._btnCancel = new System.Windows.Forms.ToolStripButton();
 			this._preview = new OverPreview.CoolPrintPreviewControl();
 			this.panel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numCopies)).BeginInit();
 			this.panel2.SuspendLayout();
 			this._toolStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -84,7 +84,7 @@
 			this.panel1.Controls.Add(this.linkPrinterProps);
 			this.panel1.Controls.Add(this.cbPrinters);
 			this.panel1.Controls.Add(this.label3);
-			this.panel1.Controls.Add(this.numericUpDown1);
+			this.panel1.Controls.Add(this.numCopies);
 			this.panel1.Controls.Add(this.label2);
 			this.panel1.Controls.Add(this.label1);
 			this.panel1.Controls.Add(this.btPrint);
@@ -104,12 +104,12 @@
 			this.linkPageProps.TabIndex = 9;
 			this.linkPageProps.TabStop = true;
 			this.linkPageProps.Text = "Свойства страницы";
-			this.linkPageProps.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkPageProps_LinkClicked);
 			this.linkPageProps.Click += new System.EventHandler(this._btnPageSetup_Click);
 			// 
 			// cbOrientation
 			// 
 			this.cbOrientation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbOrientation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.cbOrientation.FormattingEnabled = true;
 			this.cbOrientation.Items.AddRange(new object[] {
             "Книжная ориентация",
@@ -132,9 +132,13 @@
 			// cbRange
 			// 
 			this.cbRange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbRange.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.cbRange.FormattingEnabled = true;
 			this.cbRange.Items.AddRange(new object[] {
-            "Напечатать все страницы"});
+            "Напечатать все страницы",
+            "Напечатать выделенный фрагмент",
+            "Напечатать диапазон страниц",
+            "Напечатать текущую страницу"});
 			this.cbRange.Location = new System.Drawing.Point(12, 196);
 			this.cbRange.Name = "cbRange";
 			this.cbRange.Size = new System.Drawing.Size(183, 21);
@@ -155,6 +159,7 @@
 			// cbPrinters
 			// 
 			this.cbPrinters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbPrinters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.cbPrinters.FormattingEnabled = true;
 			this.cbPrinters.Location = new System.Drawing.Point(12, 127);
 			this.cbPrinters.Name = "cbPrinters";
@@ -171,23 +176,23 @@
 			this.label3.TabIndex = 5;
 			this.label3.Text = "Принтер";
 			// 
-			// numericUpDown1
+			// numCopies
 			// 
-			this.numericUpDown1.Location = new System.Drawing.Point(151, 39);
-			this.numericUpDown1.Maximum = new decimal(new int[] {
+			this.numCopies.Location = new System.Drawing.Point(151, 39);
+			this.numCopies.Maximum = new decimal(new int[] {
             10,
             0,
             0,
             0});
-			this.numericUpDown1.Minimum = new decimal(new int[] {
+			this.numCopies.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-			this.numericUpDown1.Name = "numericUpDown1";
-			this.numericUpDown1.Size = new System.Drawing.Size(44, 20);
-			this.numericUpDown1.TabIndex = 3;
-			this.numericUpDown1.Value = new decimal(new int[] {
+			this.numCopies.Name = "numCopies";
+			this.numCopies.Size = new System.Drawing.Size(44, 20);
+			this.numCopies.TabIndex = 3;
+			this.numCopies.Value = new decimal(new int[] {
             1,
             0,
             0,
@@ -214,6 +219,7 @@
 			// 
 			// btPrint
 			// 
+			this.btPrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btPrint.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.btPrint.Image = ((System.Drawing.Image)(resources.GetObject("btPrint.Image")));
 			this.btPrint.Location = new System.Drawing.Point(12, 18);
@@ -240,8 +246,6 @@
 			this._toolStrip.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this._toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this._toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._btnPrint,
-            this._btnPageSetup,
             this.toolStripSeparator2,
             this._btnZoom,
             this._btnFirst,
@@ -251,26 +255,30 @@
             this._btnNext,
             this._btnLast,
             this._separator,
-            this._btnCancel});
+            this._btnCancel,
+            this._btnPrint,
+            this._btnPageSetup});
 			this._toolStrip.Location = new System.Drawing.Point(0, 662);
 			this._toolStrip.Name = "_toolStrip";
 			this._toolStrip.Size = new System.Drawing.Size(550, 25);
 			this._toolStrip.TabIndex = 3;
 			this._toolStrip.Text = "toolStrip1";
-			this._toolStrip.Click += new System.EventHandler(this._btnPrint_Click);
 			// 
 			// _btnPrint
 			// 
 			this._btnPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this._btnPrint.Enabled = false;
 			this._btnPrint.Image = ((System.Drawing.Image)(resources.GetObject("_btnPrint.Image")));
 			this._btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this._btnPrint.Name = "_btnPrint";
 			this._btnPrint.Size = new System.Drawing.Size(23, 22);
 			this._btnPrint.Text = "Print Document";
+			this._btnPrint.Visible = false;
 			// 
 			// _btnPageSetup
 			// 
 			this._btnPageSetup.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this._btnPageSetup.Enabled = false;
 			this._btnPageSetup.Image = ((System.Drawing.Image)(resources.GetObject("_btnPageSetup.Image")));
 			this._btnPageSetup.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this._btnPageSetup.Name = "_btnPageSetup";
@@ -486,7 +494,7 @@
 			this.Load += new System.EventHandler(this.CoolPrintPreviewDialog_Load);
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numCopies)).EndInit();
 			this.panel2.ResumeLayout(false);
 			this.panel2.PerformLayout();
 			this._toolStrip.ResumeLayout(false);
@@ -500,7 +508,7 @@
 		private System.Windows.Forms.Panel panel2;
 		private CoolPrintPreviewControl _preview;
 		private System.Windows.Forms.Button btPrint;
-		private System.Windows.Forms.NumericUpDown numericUpDown1;
+		private System.Windows.Forms.NumericUpDown numCopies;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label3;
