@@ -43,8 +43,6 @@
 			this.btPrint = new System.Windows.Forms.Button();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this._toolStrip = new System.Windows.Forms.ToolStrip();
-			this._btnPrint = new System.Windows.Forms.ToolStripButton();
-			this._btnPageSetup = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this._btnZoom = new System.Windows.Forms.ToolStripSplitButton();
 			this._itemActualSize = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,6 +66,8 @@
 			this._btnLast = new System.Windows.Forms.ToolStripButton();
 			this._separator = new System.Windows.Forms.ToolStripSeparator();
 			this._btnCancel = new System.Windows.Forms.ToolStripButton();
+			this._btnPrint = new System.Windows.Forms.ToolStripButton();
+			this._btnPageSetup = new System.Windows.Forms.ToolStripButton();
 			this._preview = new OverPreview.CoolPrintPreviewControl();
 			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numCopies)).BeginInit();
@@ -263,28 +263,9 @@
 			this._toolStrip.Size = new System.Drawing.Size(550, 25);
 			this._toolStrip.TabIndex = 3;
 			this._toolStrip.Text = "toolStrip1";
-			// 
-			// _btnPrint
-			// 
-			this._btnPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this._btnPrint.Enabled = false;
-			this._btnPrint.Image = ((System.Drawing.Image)(resources.GetObject("_btnPrint.Image")));
-			this._btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this._btnPrint.Name = "_btnPrint";
-			this._btnPrint.Size = new System.Drawing.Size(23, 22);
-			this._btnPrint.Text = "Print Document";
-			this._btnPrint.Visible = false;
-			// 
-			// _btnPageSetup
-			// 
-			this._btnPageSetup.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this._btnPageSetup.Enabled = false;
-			this._btnPageSetup.Image = ((System.Drawing.Image)(resources.GetObject("_btnPageSetup.Image")));
-			this._btnPageSetup.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this._btnPageSetup.Name = "_btnPageSetup";
-			this._btnPageSetup.Size = new System.Drawing.Size(23, 22);
-			this._btnPageSetup.Text = "Page Setup";
-			this._btnPageSetup.Visible = false;
+			this._toolStrip.Enter += new System.EventHandler(this._txtStartPage_Enter);
+			this._toolStrip.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._txtStartPage_KeyPress);
+			this._toolStrip.Validating += new System.ComponentModel.CancelEventHandler(this._txtStartPage_Validating);
 			// 
 			// toolStripSeparator2
 			// 
@@ -469,6 +450,28 @@
 			this._btnCancel.Text = "Cancel";
 			this._btnCancel.Visible = false;
 			// 
+			// _btnPrint
+			// 
+			this._btnPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this._btnPrint.Enabled = false;
+			this._btnPrint.Image = ((System.Drawing.Image)(resources.GetObject("_btnPrint.Image")));
+			this._btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this._btnPrint.Name = "_btnPrint";
+			this._btnPrint.Size = new System.Drawing.Size(23, 22);
+			this._btnPrint.Text = "Print Document";
+			this._btnPrint.Visible = false;
+			// 
+			// _btnPageSetup
+			// 
+			this._btnPageSetup.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this._btnPageSetup.Enabled = false;
+			this._btnPageSetup.Image = ((System.Drawing.Image)(resources.GetObject("_btnPageSetup.Image")));
+			this._btnPageSetup.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this._btnPageSetup.Name = "_btnPageSetup";
+			this._btnPageSetup.Size = new System.Drawing.Size(23, 22);
+			this._btnPageSetup.Text = "Page Setup";
+			this._btnPageSetup.Visible = false;
+			// 
 			// _preview
 			// 
 			this._preview.AutoScroll = true;
@@ -478,6 +481,8 @@
 			this._preview.Name = "_preview";
 			this._preview.Size = new System.Drawing.Size(550, 687);
 			this._preview.TabIndex = 2;
+			this._preview.StartPageChanged += new System.EventHandler(this._preview_StartPageChanged);
+			this._preview.PageCountChanged += new System.EventHandler(this._preview_PageCountChanged);
 			// 
 			// CoolPrintPreviewDialog
 			// 
