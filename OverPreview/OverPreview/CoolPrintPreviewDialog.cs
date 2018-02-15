@@ -1,27 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Drawing.Printing;
-using System.Text;
 using System.Windows.Forms;
 
 using System.Runtime.InteropServices;
 
 namespace OverPreview
 {
-    /// <summary>
-    /// Represents a dialog containing a <see cref="CoolPrintPreviewControl"/> control
-    /// used to preview and print <see cref="PrintDocument"/> objects.
-    /// </summary>
-    /// <remarks>
-    /// This dialog is similar to the standard <see cref="PrintPreviewDialog"/>
-    /// but provides additional options such printer and page setup buttons,
-    /// a better UI based on the <see cref="ToolStrip"/> control, and built-in
-    /// PDF export.
-    /// </remarks>
-    internal partial class CoolPrintPreviewDialog : Form
+	/// <summary>
+	/// Represents a dialog containing a <see cref="CoolPrintPreviewControl"/> control
+	/// used to preview and print <see cref="PrintDocument"/> objects.
+	/// </summary>
+	/// <remarks>
+	/// This dialog is similar to the standard <see cref="PrintPreviewDialog"/>
+	/// but provides additional options such printer and page setup buttons,
+	/// a better UI based on the <see cref="ToolStrip"/> control, and built-in
+	/// PDF export.
+	/// </remarks>
+	internal partial class CoolPrintPreviewDialog : Form
     {
         //--------------------------------------------------------------------
         #region ** fields
@@ -103,12 +99,17 @@ namespace OverPreview
 			var printers = PrinterSettings.InstalledPrinters;
 			foreach (string item in printers)
 				cbPrinters.Items.Add(item);
+
+			var psizes = dlgPrinterSettings.PaperSizes;
+			foreach (PaperSize item in psizes)
+				cbPageSize.Items.Add(item.PaperName);
 			PrinterSettings_Changed();
 
 			numCopies.ValueChanged += Props_Changed;
 			cbPrinters.SelectedIndexChanged += Props_Changed;
 			cbRange.SelectedIndexChanged += Props_Changed;
 			cbOrientation.SelectedIndexChanged += Props_Changed;
+			cbPageSize.SelectedIndexChanged += Props_Changed;
 		}
 
 		//--------------------------------------------------------------------
@@ -203,8 +204,23 @@ namespace OverPreview
 			dlgPrinterSettings.PrintRange = cbRange.SelectedIndex < 3 ? (PrintRange)cbRange.SelectedIndex : PrintRange.CurrentPage;
 			dlgPrinterSettings.DefaultPageSettings.Landscape = cbOrientation.SelectedIndex == 1;
 			Document.DefaultPageSettings.Landscape = cbOrientation.SelectedIndex == 1;
+			Document.DefaultPageSettings.PaperSize = getPaperSize(cbPageSize.SelectedItem.ToString());
+			//dlgPrinterSettings.DefaultPageSettings.PaperSize = getPaperSize(cbPageSize.SelectedItem.ToString());
 			// to show new page layout
 			_preview.RefreshPreview();
+		}
+
+		private PaperSize getPaperSize(string sizename)
+		{
+			PaperSize result = null;
+			var etr = dlgPrinterSettings.PaperSizes.GetEnumerator();
+			while (etr.MoveNext())
+				if ((etr.Current as PaperSize).PaperName == sizename)
+				{
+					result = (PaperSize)etr.Current;
+					break;
+				}
+			return result;
 		}
 
 		private void PrinterSettings_Changed()
@@ -213,6 +229,7 @@ namespace OverPreview
 			cbPrinters.SelectedIndex = cbPrinters.Items.IndexOf(dlgPrinterSettings.PrinterName);
 			cbRange.SelectedIndex = (int)dlgPrinterSettings.PrintRange;
 			cbOrientation.SelectedIndex = Document.DefaultPageSettings.Landscape ? 1 : 0;
+			cbPageSize.SelectedIndex = cbPageSize.Items.IndexOf(Document.DefaultPageSettings.PaperSize.PaperName);
 		}
 
 		#endregion

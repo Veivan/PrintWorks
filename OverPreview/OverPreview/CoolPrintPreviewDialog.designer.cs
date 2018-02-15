@@ -30,6 +30,7 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CoolPrintPreviewDialog));
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.cbPageSize = new System.Windows.Forms.ComboBox();
 			this.linkPageProps = new System.Windows.Forms.LinkLabel();
 			this.cbOrientation = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
@@ -77,6 +78,7 @@
 			// 
 			// panel1
 			// 
+			this.panel1.Controls.Add(this.cbPageSize);
 			this.panel1.Controls.Add(this.linkPageProps);
 			this.panel1.Controls.Add(this.cbOrientation);
 			this.panel1.Controls.Add(this.label4);
@@ -94,11 +96,21 @@
 			this.panel1.Size = new System.Drawing.Size(212, 687);
 			this.panel1.TabIndex = 2;
 			// 
+			// cbPageSize
+			// 
+			this.cbPageSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbPageSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.cbPageSize.FormattingEnabled = true;
+			this.cbPageSize.Location = new System.Drawing.Point(12, 250);
+			this.cbPageSize.Name = "cbPageSize";
+			this.cbPageSize.Size = new System.Drawing.Size(183, 21);
+			this.cbPageSize.TabIndex = 10;
+			// 
 			// linkPageProps
 			// 
 			this.linkPageProps.AutoSize = true;
 			this.linkPageProps.LinkColor = System.Drawing.SystemColors.ControlText;
-			this.linkPageProps.Location = new System.Drawing.Point(90, 256);
+			this.linkPageProps.Location = new System.Drawing.Point(90, 274);
 			this.linkPageProps.Name = "linkPageProps";
 			this.linkPageProps.Size = new System.Drawing.Size(107, 13);
 			this.linkPageProps.TabIndex = 9;
@@ -549,5 +561,6 @@
 		private System.Windows.Forms.ToolStripButton _btnLast;
 		private System.Windows.Forms.ToolStripSeparator _separator;
 		private System.Windows.Forms.ToolStripButton _btnCancel;
+		private System.Windows.Forms.ComboBox cbPageSize;
 	}
 }
