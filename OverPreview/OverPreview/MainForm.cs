@@ -107,7 +107,12 @@ namespace OverPreview
 
 		private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
 		{
-			// fill page with text
+			Image img = Image.FromFile("1q.bmp");
+			Point loc = new Point(0, 0);
+			e.Graphics.DrawImage(img, loc);
+			e.HasMorePages = false;
+
+			/*/ fill page with text
 			Rectangle rc = e.MarginBounds;
 			rc.Height = _font.Height + 10;
 			for (int i = 0; ; i++)
@@ -123,7 +128,7 @@ namespace OverPreview
 
 			// move on to next page
 			_page++;
-			e.HasMorePages = _page < 2;
+			e.HasMorePages = _page < 2; */
 		}
 	}
 }
